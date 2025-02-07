@@ -5,7 +5,7 @@ class Solution {
         {
             int tmp = x%10;
             res = res*10+tmp;
-            x = (x)/10;
+            x = (x-tmp)/10;
             
             if(res%10!=tmp) 
             {
