@@ -1,29 +1,33 @@
 class Solution {
     public int minEatingSpeed(int[] piles, int h) {
-        int low=1;
-        int high=Integer.MIN_VALUE;
-        for(int i=0;i<piles.length;i++){
-            high=Math.max(high,piles[i]);
+        // binary seach
+        int left = 1;
+        int right = -1; // max pile 
+        for (int pile : piles) {
+            right = Math.max(pile, right);
         }
-        while(low<high){
-            int mid=low+(high-low)/2;
-            if(blackbox(mid,piles,h)){
-                high=mid;
+        while (left < right) {
+            int speed = left + (right - left) / 2;
+            boolean resultForSpeed = canFinish(piles, speed, h);
+            if (!resultForSpeed) {
+                left = speed + 1;
             }
-            else
-                low=mid+1;
+            else {
+                right = speed;
+            }
         }
-        return low;
+        return left;
     }
-    public boolean blackbox(int maxpiles,int[] piles,int h){
-        int hours=0;
-        for(int i:piles){
-            int time=i/maxpiles;
-            hours+=time;
-            if(i%maxpiles!=0) hours++;
+
+    private boolean canFinish(int[] piles, int speed, int h) {
+        int totalTime = 0;
+        for (int pile : piles) {
+            int time = (pile + speed - 1) / speed;
+            totalTime += time;
+            if (totalTime > h) {
+                return false;
+            }
         }
-        if(hours<=h)
-            return true;
-        return false;
+        return true;
     }
 }
